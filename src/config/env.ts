@@ -16,5 +16,10 @@ export function createEnv(source: Record<string, string | undefined>): AppEnv {
 }
 
 export function getEnv(): AppEnv {
-  return createEnv(process.env);
+  try {
+    return createEnv(process.env);
+  } catch (error) {
+    console.error("Failed to parse environment variables:", error);
+    throw error;
+  }
 }

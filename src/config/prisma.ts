@@ -11,13 +11,18 @@ declare global {
 
 export function getPrismaClient() {
   if (!globalThis.__prisma__) {
-    const env = getEnv();
-    globalThis.__pgPool__ ??= new Pool({
-      connectionString: env.DATABASE_URL,
-    });
-    const adapter = new PrismaPg(globalThis.__pgPool__);
+    try {
+      const env = getEnv();
+      globalThis.__pgPool__ ??= new Pool({
+        connectionString: env.DATABASE_URL,
+      });
+      const adapter = new PrismaPg(globalThis.__pgPool__);
 
-    globalThis.__prisma__ = new PrismaClient({ adapter });
+      globalThis.__prisma__ = new PrismaClient({ adapter });
+    } catch (error) {
+      console.error("Prisma client initialization failed:", error);
+      throw error;
+    }
   }
 
   return globalThis.__prisma__;
