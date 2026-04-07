@@ -178,7 +178,7 @@ export function createDashboardRepository(client: DashboardPrismaClient = prisma
         _count: { id: true },
       });
 
-      return groups.map((group) => ({
+      return groups.map((group: { category: RecordCategory; type: RecordType; _sum: { amount: Prisma.Decimal | null }; _count: { id: number } }) => ({
         category: group.category,
         type: group.type,
         totalAmount: group._sum.amount ? Number(group._sum.amount.toString()) : 0,
